@@ -1,0 +1,12 @@
+function [out_img] = myHE(inp_img)
+    inp_hist = imhist(inp_img);
+    inp_hist = double(inp_hist);
+    [m n] = size(inp_img(:));
+    inp_hist = inp_hist / m;    %get the pdf(r)
+    
+    T = cumsum(inp_hist);
+    
+    out_img = T(inp_img);
+    
+    out_img = uint8(out_img * 255);    
+end
