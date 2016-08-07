@@ -6,7 +6,7 @@ function [out_img] = myHE(inp_img)
     
     T = cumsum(inp_hist);
     
-    out_img = T(inp_img);
+    out_img = T(inp_img + 1);   % +1 for index error reasons
     
     out_img = uint8(out_img * 255);    
 end
