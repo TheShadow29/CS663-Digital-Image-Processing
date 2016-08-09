@@ -1,4 +1,6 @@
 function [y] = myLinearContrastStretching(x, a, b, c, d)
+    % piece wise linear curve which passess through the following points:
+    	% 90,0) , (a, b) , (c, d) , (255, 255)
     y = x;
     x1 = (x > 0) & (x < a);
     y(x1) = b/a * x(x1);

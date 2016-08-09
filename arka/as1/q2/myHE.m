@@ -4,7 +4,7 @@ function [out_img] = myHE(inp_img)
     [m n] = size(inp_img(:));
     inp_hist = inp_hist / m;    %get the pdf(r)
     
-    T = cumsum(inp_hist);
+    T = cumsum(inp_hist);	% get the transformation r to s
     
     out_img = T(inp_img + 1);   % +1 for index error reasons
     
