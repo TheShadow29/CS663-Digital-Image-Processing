@@ -1,0 +1,21 @@
+function [out_img1] = myHE(inp_img1)
+    [m1, n1, p1] = size(inp_img1);
+    out_img1 = zeros(m1,n1,p1);
+    for i=1:p1
+        if p1 ~= 1
+         inp_img = inp_img1(:, :, i);
+        end
+        inp_hist = imhist(inp_img);
+        inp_hist = double(inp_hist);
+        [m n] = size(inp_img(:));
+        inp_hist = inp_hist / m;    %get the pdf(r)
+
+        T = cumsum(inp_hist);	% get the transformation r to s
+
+        out_img = T(inp_img + 1);   % +1 for index error reasons
+
+        out_img = uint8(out_img * 255);   
+        out_img1(:,:,i) = out_img;
+    end
+    
+end
