@@ -23,7 +23,7 @@ function [ out_img ] = myCLHE( inputImage, h )
     reducedMass = 1 - sum(new_inp_hist); % This is used to compute the mass of the function
     % that has been clipped off by taking the mass available and them subtracting it from 1
     
-    inp_hist_clahe = new_inp_hist + reducedMass/m; % Uniformly adding the reduced mass to the histogram
+    inp_hist_clahe = new_inp_hist + reducedMass/256; % Uniformly adding the reduced mass to the histogram
     
     T = cumsum(inp_hist_clahe); % creating a cumulative sum of the pdf to make a cdf
     

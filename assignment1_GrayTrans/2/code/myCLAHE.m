@@ -9,6 +9,8 @@ function [ outputImage ] = myCLAHE( inputImage, h, N )
 if mod(N,2) == 0
     N = N + 1;
 end
+outputImage = zeros(m,n);
+
 tic % start the time
 for i = 1:m   % a loop to go through all the rows
     for j = 1:n  % a loop to go throuogh all the columns
@@ -23,12 +25,12 @@ for i = 1:m   % a loop to go through all the rows
         % The above statement is necessary because it is not always the size of the obtained window iss NxN because of the pixels near the 
         % edge. Hence this is to be determined for every pixel
         
-        inputImage(i,j) = tempOut(index(1), index(2)); % replace the new value of the pixel
+        outputImage(i,j) = tempOut(index(1), index(2)); % replace the new value of the pixel
     end
 end
-outputImage = inputImage;  % move the image into the output variable
-
-toc
+% outputImage = u;  % move the image into the output variable
+outputImage = uint8(outputImage);
+toc;
 
 end
 
