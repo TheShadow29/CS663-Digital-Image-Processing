@@ -1,5 +1,7 @@
-function [out_img] = myPatchBasedFiltering(inp_img, sigma_space, sigma_range, window_around_pixel, window_around_P)
+function [out_img] = myPatchBased_new(inp_img, sigma_space, sigma_range, window_around_pixel, window_around_P)
+    
     tic;
+    count = 0;
     out_img = zeros(size(inp_img));
 
     %compute size of image
@@ -23,35 +25,23 @@ function [out_img] = myPatchBasedFiltering(inp_img, sigma_space, sigma_range, wi
     %create a padded image for convolution
     padded_img = zeros([m+window_around_pixel + window_around_P, n+window_around_pixel+window_around_P]);
     padded_img(mid+1:mid+m, mid+1:mid+n) = noisy_img;
+%     [m1, n1] = size(padded_img);
     
     for i = mid+1:mid+m
+        count = count +1;
         for j = mid+1:n+mid
-            intensities = getNeighbourVector(padded_img,i,j,window_around_pixel, window_around_P);
+%             central_window_indices = getNeighborWindowIndices(padded_img, i, j, window_around_P)
             
-            [m3,n3] = size(intensities);
-            I_p = (intensities{(m3+1)/2, (n3+1)/2});
+            patch = getNeighbourhoodWindow(padded_img, i, j, window_around_P + window_around_pixel - 1);
+            [patch_weight] = getPatch_weights(patch,i,j,window_around_pixel, window_around_P, sigma_range);
             
-            [m5, n5] = size(I_p);
-%             new_int = cellfun(@minus, intensities, I_p);
-            for k=1:m3*n3
-                [m4, n4] = size(intensities{k});
-                if (n5 ~= n4 || m5 ~= m4)
-                    intensities{k} = padarray(intensities{k},[abs(m5 - m4), abs(n5 - n4)], 'pre');
-                end
-                intensities{k} = intensities{k} - I_p;
-            end
-            
-            new_int = cellfun(@norm, intensities);
-            intensities_g = normpdf(new_int, 0, sigma_range);
-            
-            W_p = intensities_g.*distances_g;
-            for k=1:m3*n3
-                wp_int = W_p * intensities{k};
-            end
-            WI_p = sum(wp_int);
-            
-            out_img(i-mid, j-mid) = sum(WI_p(:))/sum(W_p(:));
+            W_p = patch_weight.*distances_g;
+            patch1 = getNeighbourhoodWindow(padded_img,i,j,window_around_P);
+            WpIp = W_p.*patch1;
+            out_img(i-mid, j-mid) = sum(WpIp(:))/sum(W_p(:));         
         end
+        disp(count);
+        
     end
     figure; imshow(inp_img, [min(inp_img(:)), max(inp_img(:))]);
     figure; imshow(noisy_img, [min(noisy_img(:)), max(noisy_img(:))]);
