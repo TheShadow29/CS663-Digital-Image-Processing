@@ -1,0 +1,39 @@
+function [ count ] = face_match_thresh(k )
+    %false positive -> should not match with the database, yet incorrectly 
+    %matching
+    %false negative -> is present in the database, but not being correctly
+    %predicted
+test = load('testset.mat');
+testset = test.testset;
+
+test_nomatch = load('test_unmatch.mat');
+test_unmatch = test_nomatch.test_unmatch;
+
+
+[V_hat, xbar, alpha] = faceRecognition(k);
+%z = testset-repmat(xbar, [1, size(testset,2)]);
+z = test_unmatch - repmat(xbar, [1, size(testset,2)]);
+thresh = 1;
+
+l = size(alpha,2);
+%disp(size(alpha));
+count = 0;
+
+beta = V_hat'*z;
+
+for i = 1: size(beta,2)
+    diff = alpha - repmat(beta(:,i),[1,l]);
+    distances = sum(diff.^2,1);
+    %disp(min(distances));
+    j = find(distances == min(distances));
+    min_dist = min(distances);
+    disp(j);
+%     if (floor((i-1)/4) == floor((j-1)/6))
+%         count = count+1;
+%     end
+    if (min_dist
+end
+
+
+end
+
