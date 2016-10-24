@@ -6,7 +6,7 @@ function [out_img] = pca_image_denoise(inp_img1, patch_size, window_size, Lx)
     inp_img2 = inp_img1 + uint8(randn(size(inp_img1))*sigma);
     %h = fspecial('gaussian',3,20);
     
-    inp_img = double(inp_img2)/255;
+    inp_img = double(inp_img2);
     
     inp_img = padarray(inp_img, [half_p + half_w, half_p + half_w], 'symmetric');
     [m,n] = size(inp_img);
